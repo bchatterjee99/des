@@ -29,23 +29,13 @@ void input()
 
 void test1()
 {
-    printf("IP table:\n");
-    for(int i=0; i<8; i++)
-    {
-	for(int j=0; j<8; j++)
-	{
-	    printf("%2d  ", IP[i*8 + j]);
-	}
-	printf("\n");
-    }
-    printf("\n\n");
 
     printf("plaintext:\n");
     for(int i=0; i<len; i++)
 	printf("%c", plaintext[i], plaintext[i]);
     printf("\n\n");
 
-    des(plaintext);
+    des_enc(plaintext);
 }
 
 int main()
