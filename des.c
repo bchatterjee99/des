@@ -322,8 +322,7 @@ void test2(unsigned char* key)
 void des_enc(unsigned char* block, unsigned char* key, unsigned char* out)
 {
     // test2(key); // debug
-
-    printf("\n\nDES encrypt:-------\n\n");
+    // printf("\n\nDES encrypt:-------\n\n");
 
     key_schedule(key, 0);
 

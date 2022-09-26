@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "des.h"
+#include "ofb.h"
 
 unsigned char* plaintext;
 int padded_len;
@@ -56,31 +58,38 @@ void input_key()
 void test1()
 {
 
+}
+
+int main()
+{
+    srand(time(0));
+
+    input_plaintext();
+    input_key();
+
     printf("plaintext:\n");
     for(int i=0; i<padded_len; i++)
 	printf("%c", plaintext[i]);
     printf("\n\n");
 
-    des_enc(plaintext, key, ciphertext);
+
+    unsigned char iv[8];
+    for(int i=0; i<8; i++) iv[i] = rand();
+
+    ofb_enc(plaintext, padded_len, key, iv, ciphertext);
 
     printf("ciphertext:\n");
-    for(int i=0; i<8; i++)
-	printf("%02x", ciphertext[i]);
+    for(int i=0; i<padded_len; i++)
+	printf("%02x ", ciphertext[i]);
     printf("\n\n");
-
 
     FILE* fp = fopen("ciphertext", "w");
     for(int i=0; i<8; i++)
+	fputc(iv[i], fp);
+    for(int i=0; i<padded_len; i++)
 	fputc(ciphertext[i], fp);
     fclose(fp);
-}
 
-int main()
-{
-    input_plaintext();
-    input_key();
-
-    test1();
 
     free(plaintext);
     free(ciphertext);
