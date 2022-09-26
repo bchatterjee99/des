@@ -4,9 +4,17 @@ tput reset
 
 flags=""
 
-if gcc main.c des.c $flags; then
+# if gcc encrypt.c des.c $flags; then
+#     echo -e "\n\n  compile hoe geche\n\n";
+#     ./a.out
+# else
+#     echo -e "\n\n  hocche na\n\n";
+# fi
+
+if gcc decrypt.c des.c $flags; then
     echo -e "\n\n  compile hoe geche\n\n";
     ./a.out
 else
     echo -e "\n\n  hocche na\n\n";
 fi
+
