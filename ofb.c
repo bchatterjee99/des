@@ -4,8 +4,27 @@
 #include "des.h"
 #include "ofb.h"
 
-
-
+/*
+  +------------+                                                   
+  |     IV     |------------.        .-------------.        .-------------.        .-  ...                                                                      
+  +------------+            |        |             |        |             |        |                                                    
+        |                   v        |             v        |             v        |                                                      
+        |            +-------------+ |      +-------------+ |      +-------------+ |                                                
+        |            |             | |      |             | |      |             | |                                                    
+        |            |     DES     | |      |     DES     | |      |     DES     | |                                                      
+        |            |             | |      |             | |      |             | |                                                    
+        |            +-------------+ |      +-------------+ |      +-------------+ |                                                  
+        |                   |        |             |        |             |        |                                                   
+        |                   |        |             |        |             |        |                                                   
+        |                   |--------'             |--------'             |--------'                                                   
+        |                   -                      -                      -                                                                
+        |         .------->|+|           .------->|+|           .------->|+|                                                             
+        |         |         -            |         -            |         -                                                            
+        |         |         |            |         |            |         |                                                             
+        v        m0         |           m1         |           m2         |                                                               
+                            v                      v                      v                                                          
+                           c0                     c1                     c2                                                          
+ */
 void ofb_enc(unsigned char* plaintext, int len, unsigned char* key, unsigned char* iv, unsigned char* ciphertext)
 {
     unsigned char in[8];
@@ -25,6 +44,28 @@ void ofb_enc(unsigned char* plaintext, int len, unsigned char* key, unsigned cha
     }
 }
 
+/*
+
+  +------------+                                                   
+  |     IV     |------------.        .-------------.        .-------------.        .-  ...                                                                      
+  +------------+            |        |             |        |             |        |                                                    
+        |                   v        |             v        |             v        |                                                      
+        |            +-------------+ |      +-------------+ |      +-------------+ |                                                
+        |            |             | |      |             | |      |             | |                                                    
+        |            |     DES     | |      |     DES     | |      |     DES     | |                                                      
+        |            |             | |      |             | |      |             | |                                                    
+        |            +-------------+ |      +-------------+ |      +-------------+ |                                                  
+        |                   |        |             |        |             |        |                                                   
+        |                   |        |             |        |             |        |                                                   
+        |                   |--------'             |--------'             |--------'                                                   
+        |                   -                      -                      -                                                                
+        |         .------->|+|           .------->|+|           .------->|+|                                                             
+        |         |         -            |         -            |         -                                                            
+        |         |         |            |         |            |         |                                                             
+        v        c0         |           c1         |           c2         |                                                               
+                            v                      v                      v                                                          
+                           m0                     m1                     m2                                                          
+*/
 void ofb_dec(unsigned char* ciphertext, int len, unsigned char* key, unsigned char* iv, unsigned char* decryptedtext)
 {
     unsigned char in[8];

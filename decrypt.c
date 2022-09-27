@@ -21,7 +21,7 @@ void input_ciphertext()
     for(int i=0; i<8; i++)
 	fread(iv + i, 1, 1, fp);
 
-    // first 8 bits iv
+    // first 8 bytes iv
     len -= 8;
 
     padded_len = len/8;

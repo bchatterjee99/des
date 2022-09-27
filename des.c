@@ -194,7 +194,35 @@ void f(unsigned char* in, unsigned char* out, int round)
         // out[i] = tmp[P[i] - 1]
 }
 
-// 1 round feistel structure (encryption)
+/*
+       |                                 |
+       v                                 v
+  +--------------------------------------------+
+  |      L               |            R        |
+  +--------------------------------------------+
+       |                                 |
+       |                 +---------------|--------- round key
+       |                 |               |
+       |                 v               |
+       |           +---------+           |
+       -           |         |           |
+      |+|<---------|    F    |<----------+
+       -           |         |           |
+       |           +---------+           |
+       \                                 /
+        \-------------------------------'
+        /\ 
+       |  \------------------------------+
+       |                                 |
+       |                                 |
+       v                                 v
+  +-------------------------------------------+
+  |      L'             |             R'      |
+  +-------------------------------------------+
+       |                                 |
+       v                                 v
+
+1 round feistel structure (encryption) */
 void feistel1(unsigned char* l, unsigned char* r, int round)
 {
     // f_out
@@ -211,7 +239,36 @@ void feistel1(unsigned char* l, unsigned char* r, int round)
     // L'
     for(int i=0; i<4; i++) l[i] = r_back_up[i];
 }
-// 1 round feistel structure (decryption)
+
+/*
+       |                                 |
+       v                                 v
+  +--------------------------------------------+
+  |      L               |            R        |
+  +--------------------------------------------+
+       |                                 |
+       |                 +---------------|--------- round key
+       |                 |               |
+       |                 v               |
+       |           +---------+           |
+       |           |         |           -
+       |---------->|    F    |--------->|+|
+       |           |         |           -
+       |           +---------+           |
+       \                                 /
+        \-------------------------------'
+        /\ 
+       |  \------------------------------+
+       |                                 |
+       |                                 |
+       v                                 v
+  +-------------------------------------------+
+  |      L'             |             R'      |
+  +-------------------------------------------+
+       |                                 |
+       v                                 v
+
+       1 round feistel structure (decryption) */
 void feistel2(unsigned char* l, unsigned char* r, int round)
 {
     // f_out
@@ -232,10 +289,10 @@ void feistel2(unsigned char* l, unsigned char* r, int round)
 
 int get_shift(int round)
 {
+    if(round == 0) return 1;
     if(round == 1) return 1;
-    if(round == 2) return 1;
-    if(round == 9) return 1;
-    if(round == 16) return 1;
+    if(round == 8) return 1;
+    if(round == 15) return 1;
     return 2;
 }
 void key_schedule(unsigned char* key, int reversed)
@@ -247,6 +304,11 @@ void key_schedule(unsigned char* key, int reversed)
     // PC-1
     for(int i=0; i<56; i++)
 	set_bit(curr_key, i, get_bit(key, PC_1[i] - 1));
+
+    /* printf("after PC-1:\n"); */
+    /* for(int i=0; i<7; i++) */
+    /* 	printf("%02x ", curr_key[i]); */
+    /* printf("\n\n"); */
 
     for(int i=0; i<16; i++)
     {
@@ -271,6 +333,11 @@ void key_schedule(unsigned char* key, int reversed)
 
 	// copy to curr_key
 	for(int j=0; j<7; j++) curr_key[j] = tmp_key[j];
+
+	/* printf("CD: %d\n", i); */
+	/* for(int j=0; j<7; j++) */
+	/*     printf("%02x ", curr_key[j]); */
+	/* printf("\n\n"); */
 
 	// PC-2
 	int idx = i;
