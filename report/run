@@ -1,3 +1,0 @@
-#-*-sh-*-
-
-pdflatex --output-directory ./tmp/ des.tex
